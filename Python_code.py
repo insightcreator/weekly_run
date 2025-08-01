@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
 def get_tickers_from_csv(url):
-    df = pd.read_csv(url)
+    df = pd.read_csv(url).iloc[:20,:]
     return df['Symbol'].str.strip() + '.NS'
 
 urls=["ind_niftylargemidcap250list.csv"]
@@ -24,7 +24,7 @@ for t in enumerate(tickers):
             df["wa_move"]=df['Close']*df['Volume']
             df["lead_wa_move"]=df["wa_move"].shift(7)
             df["lead_close"]=df['Close'].shift(7)
-            df["stock"] =[col[1] for col in df.columns][0].split
+            df["stock"] =[col[1].split(".")[0] for col in df.columns][0]
             col=[col[0] for col in df.columns]
             df.columns=col
             df.reset_index(inplace=True)
@@ -82,7 +82,7 @@ def get_top_headlines(ticker, days=15, max_articles=5):
             headlines.append(item.title.text)
         return headlines
    
-tickers2 = [j.split(".")[0] for j in tickers]
+tickers2 = [j for j in Interested_stocks["stock"]]
 
 # Collect data into a list of dicts
 news_data = []
@@ -94,6 +94,7 @@ for ticker in tickers2:
 
 # Convert to DataFrame
 df = pd.DataFrame(news_data)
+df_final=Interested_stocks.merge(df,left_on="stock", right_on='Ticker', how='left')
 
 #file exported
-df.to_excel(f"./Output/stocks_{Interested_stocks['Date'][0].strftime('%Y%m%d')}.xlsx", index=False)
+df_final.to_excel(f"./Output/stocks_{Interested_stocks['Date'][0].strftime('%Y%m%d')}.xlsx", index=False)
