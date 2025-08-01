@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
 def get_tickers_from_csv(url):
-    df = pd.read_csv(url).iloc[:20,:]
+    df = pd.read_csv(url)
     return df['Symbol'].str.strip() + '.NS'
 
 urls=["ind_niftylargemidcap250list.csv"]
