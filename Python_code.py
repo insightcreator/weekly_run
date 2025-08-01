@@ -40,17 +40,17 @@ for t in enumerate(tickers):
     except Exception as e:
         print("Error", t, e)
 
-top_abs   = Complete_List.nlargest(10, 'abs_chg')
+top_abs   = Complete_List.nlargest(25, 'abs_chg')
 top_abs['Selection']="Top Absolute Change"
-bot_abs   = Complete_List.nsmallest(10, 'abs_chg')
+bot_abs   = Complete_List.nsmallest(25, 'abs_chg')
 bot_abs['Selection']="Bottom Absolute Change"
-top_pct   = Complete_List.nlargest(10, 'pct_chg')
+top_pct   = Complete_List.nlargest(25, 'pct_chg')
 top_pct['Selection']="Top Percentage Change"
-bot_pct   = Complete_List.nsmallest(10, 'pct_chg')
+bot_pct   = Complete_List.nsmallest(25, 'pct_chg')
 bot_pct['Selection']="Bottom Percentage Change"
-top_pct_volume   = Complete_List.nlargest(10, 'pct_chg_volume')
+top_pct_volume   = Complete_List.nlargest(25, 'pct_chg_volume')
 top_pct_volume['Selection']="Top Percentage Change with Volume"
-bot_pct_volume   = Complete_List.nsmallest(10, 'pct_chg_volume')
+bot_pct_volume   = Complete_List.nsmallest(25, 'pct_chg_volume')
 bot_pct_volume['Selection']="Bottom Percentage Change with Volume"
 
 Interested_stocks=pd.concat([top_abs,bot_abs,top_pct,bot_pct,bot_pct_volume,top_pct_volume],ignore_index=True)
@@ -82,7 +82,7 @@ def get_top_headlines(ticker, days=15, max_articles=5):
             headlines.append(item.title.text)
         return headlines
    
-tickers2 = [j for j in Interested_stocks["stock"]]
+tickers2 = set([j for j in Interested_stocks["stock"]])
 
 # Collect data into a list of dicts
 news_data = []
